@@ -1,0 +1,15 @@
+{
+  "name": "tiny_app",
+  "version": "1.0.0",
+  "description": "This is a tiny docker app to show how docker works and get people started",
+  "author": "Jose Aranguren",
+  "license": "MIT",
+  "homepage": "https://github.com/jarangutan/docker-starter-workshop#readme",
+  "main": "app.js",
+  "scripts": {
+    "start": "node app.js"
+  },
+  "dependencies": {
+    "express": "^4.17.1"
+  }
+}
