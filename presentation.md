@@ -282,7 +282,7 @@ Go to your favorite browser and enter the url `localhost`
 
 We should see `"Hello World!"`
 
-Congrats! You have successfully containred an app!
+Congrats! You have successfully containerized an app!
 
 ---
 
