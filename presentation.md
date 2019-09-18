@@ -241,7 +241,7 @@ We should see:
 
 ```bash
 REPOSITORY            TAG                 IMAGE ID            CREATED             SIZE
-gavisch/tiny_app   latest              97d1e988389d        26 seconds ago      910MB
+gavisch/tiny_app      latest              97d1e988389d        26 seconds ago      910MB
 node                  latest              d8c33ae35f44        5 days ago          907MB
 ```
 
@@ -272,7 +272,7 @@ docker ps
 You should see our new container running
 ```bash
 CONTAINER ID        IMAGE                 COMMAND                  CREATED             STATUS              PORTS                  NAMES
-536eb60f599b        gavisch/tiny_app   "docker-entrypoint.s…"   3 minutes ago       Up 3 minutes        0.0.0.0:80->3000/tcp   tiny_app
+536eb60f599b        gavisch/tiny_app      "docker-entrypoint.s…"   3 minutes ago       Up 3 minutes        0.0.0.0:80->3000/tcp   tiny_app
 ```
 
 ---
