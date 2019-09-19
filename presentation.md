@@ -253,10 +253,10 @@ docker run --detach --name tiny_app --publish 80:3000 <dockerhub_username>/tiny_
 ----
 
 #### Run command breakdown
-- _`--detach`_ runs the container in detached mode (fancy word for in the background)
-- _`--name tiny_app`_ names our container "tiny_app" to make it easier to reference later
-- _`--publish 80:3000`_ publishes a containers port to the host with a mapping of `80` to `3000`
-  - remember that we made tiny_app listen on port _`3000`_ in _`index.js`_
+- `--detach` runs the container in detached mode (fancy word for in the background)
+- `--name tiny_app` names our container "tiny_app" to make it easier to reference later
+- `--publish 80:3000` publishes a containers port to the host with a mapping of `80` to `3000`
+  - remember that we made tiny_app listen on port `3000` in `index.js`
 
 A long alphanumeric string will indicate our container started successfully
 
@@ -277,21 +277,21 @@ CONTAINER ID        IMAGE                 COMMAND                  CREATED      
 ---
 
 ### Testing our containerized tiny app
-Go to your favorite browser and enter the url _`localhost`_
+Go to your favorite browser and enter the url `localhost`
 
-We should see _`"Hello World!"`_
+We should see `"Hello World!"`
 
 Congrats! You have successfully containerized an app!
 
 ---
 
 ### Stopping our application
-To stop our application from running, lets run a command using the name we gave the container _`"tiny_app"`_
+To stop our application from running, lets run a command using the name we gave the container `"tiny__app"`
 ```bash
 docker stop tiny_app
 ```
 
-We should see the name _`tiny_app`_ pop up in our terminal signifying success
+We should see the name `tiny_app` pop up in our terminal signifying success
 
 ----
 
@@ -301,7 +301,7 @@ Use the command below to see all our stopped containers
 docker ps -a
 ```
 
-Our tiny_app container will show up with a _`STATUS`_ of _`Exited (0)`_
+Our tiny_app container will show up with a `STATUS` of `Exited (0)`
 
 ---
 
@@ -311,9 +311,9 @@ Remove the container using:
 docker rm tiny_app
 ```
 
-The name _`tiny_app`_ will pop up again to tell us the command succeeded
+The name `tiny_app` will pop up again to tell us the command succeeded
 
-Running _`docker ps -a`_ will confirm our container has been deleted
+Running `docker ps -a` will confirm our container has been deleted
 
 ---
 
@@ -360,11 +360,183 @@ Since we don't have the image locally, docker will go to docker hub and pull dow
 ### Congratulations!
 You have learned the basics of working with docker
 
+Carry on to play with docker-compose
+
 ---
 
 # "big_app/"
 
 ---
 
+## What is docker-compose?
+>Compose is a tool for defining and running multi-container Docker applications
 
+[docker compose documentation](https://docs.docker.com/compose/)]
 
+----
+
+### Only for prototyping
+There are way better tools for managing multiple containers
+
+`docker-compose` is good for prototyping
+
+If production is the goal, use something like Kubernetes or Docker Swarm
+
+---
+
+## Our `big_app`
+RESTful API with nodeJS, express, and mongodb
+
+----
+
+### Directory
+```bash
+big_app/
+├── docker-compose.yml
+├── Dockerfile
+├── package.json
+├── package-lock.json
+├── src/
+```
+
+--- 
+
+## Dockerfile
+```Dockerfile
+FROM node:latest
+
+WORKDIR /app
+
+COPY package*.json ./
+
+RUN npm install
+
+COPY . .
+
+EXPOSE 8080
+CMD [ "npm", "start" ]
+```
+
+---
+
+## docker-compose.yml
+```yml
+version: "3"
+services:
+  app:
+    container_name: keyboard-api
+    restart: always
+    build: ./
+    ports:
+      - "8080:8080"
+    volumes:
+      - .:/app
+    depends_on:
+      - mongo
+  mongo:
+    container_name: mongo
+    image: mongo
+    ports:
+      - "27017:27017"
+```
+
+----
+
+### Breaking it down
+We declare two services: `app` and `mongo`
+
+----
+
+#### Breaking it down - app
+- `container_name: keyboard-api` Name of our container (similar to `--name` from before)
+- `restart: always` Restarts the service if an error gets thrown. Good for debugging and live testing
+- `build: ./` Build the current directory since it has our `Dockerfile`
+- `ports: 80:8080` same as `-p 80:3000` from before
+- `volumes: .:app/` A volume is a directory we specify to be mounted onto our container. This allows the sharing of files between the host and the container and even between containers
+- `depends_on: mongo` Makes sure our mongo container spins up first
+
+----
+
+#### Breaking it down - mongo
+- `container_name: mongo` Name our container mongo
+- `image: mongo` This pulls the official mongodb image from Docker Hub. Similar to our FROM command inside the Dockerfile
+- `ports: "27017:27017"` Bind port 27017 on our host to the mongodb default port inside the container. We're basically using our host as a network bridge between containers
+
+---
+
+## The source code
+This is not a RESTful API tutorial so we won't delve into the code in src/
+
+---
+
+## The source code that matters
+We have to change mongoose to connect to our mongo container IP. `mongo` will work similarly to `localhost` but instead of 127.0.0.1 it will be whatever IP our mongo container has. 
+
+Change it from:
+```javascript
+// Connect to Mongoose and set connection variable
+mongoose.connect('mongodb://localhost:27017/expressmongo');
+```
+
+to:
+
+```javascript
+// Connect to Mongoose and set connection variable
+mongoose.connect('mongodb://mongo:27017/expressmongo');
+```
+
+---
+
+## Running our service
+Start our service by running this command:
+```bash
+$ docker-compose up
+```
+
+You can add -d at the end of the command to run in detached mode
+
+**Note** _Make sure you install docker-compose ;)_
+
+---
+
+## Testing our api
+| request    | URI                |
+| ---------- | ------------------ |
+| __GET__    | /api/keyboards     |
+| __POST__   | /api/keyboards     |
+| __GET__    | /api/keyboards/:id |
+| __PUT__    | /api/keyboards/:id |
+| __PATCH__  | /api/keyboards/:id |
+| __DELETE__ | /api/keyboards/:id | 
+
+----
+
+### POST
+Add entry to our database
+```bash
+$ curl -X POST \
+  http://localhost:8080/api/keyboards \
+  -H 'Cache-Control: no-cache' \
+  -H 'Content-Type: application/x-www-form-urlencoded' \
+  -d 'name=Planck&style=ortholinear&switch=Zealio%2065g'
+```
+
+----
+
+### GET
+Retrieve our new record
+```bash
+$ curl -X GET \
+  http://localhost:8080/api/keyboards/
+```
+
+We should see
+
+```
+{"status":"success","message":"Sweet keyboards successfully retrieved!","data":[{"_id":"5c8413f28eb193001ed66783","create_date":"2019-03-09T19:28:50.537Z","name":"Planck","style":"ortholinear","switch":"Zealio 65g","__v":0}]}
+```
+
+## Congratulations!
+You delved into what makes docker fun!
+
+Hopefully this tutorial helps you in your journey to becoming a container pro :D

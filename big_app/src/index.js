@@ -18,7 +18,7 @@ app.use(bodyParser.urlencoded({
 app.use(bodyParser.json());
 
 // Connect to Mongoose and set connection variable
-mongoose.connect('mongodb://mongo:27017/expressmongo');
+mongoose.connect('mongodb://mongo:27017/expressmongo', { useNewUrlParser: true, useUnifiedTopology: true });
 
 const db = mongoose.connection;
 // Setup server port
