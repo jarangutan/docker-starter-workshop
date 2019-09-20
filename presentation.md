@@ -8,6 +8,8 @@ highlightTheme: "solarized-dark"
 # docker-starter-workshop
 Intro to docker workshop covering a "tiny_app" and a "big_app"
 
+https://github.com/jarangutan/docker-starter-workshop
+
 ---
 
 ## What is in this repo?
@@ -15,7 +17,7 @@ Intro to docker workshop covering a "tiny_app" and a "big_app"
 This is a "Hello World" mini tutorial covering the basics of docker
 
 ### "big_app/"
-This tutorial covers the use of `docker` with `docker_compose` to create a REST mechanical keyboard api using node and mongodb
+This tutorial covers the use of `docker` with `docker_compose` to create a RESTful mechanical keyboard api using node and mongodb
 
 ---
 
@@ -23,8 +25,8 @@ This tutorial covers the use of `docker` with `docker_compose` to create a REST 
 - A terminal (depends on your OS!)
 - [docker](https://docs.docker.com/install/)
 - [npm and NodeJS](https://www.npmjs.com/get-npm)
-- [A docker hub account](https://docs.docker.com/docker-hub/)
-- (For big_app only) [docker-compose](https://docs.docker.com/compose/install/)
+- [docker hub account](https://docs.docker.com/docker-hub/)
+- (for big_app only) [docker-compose](https://docs.docker.com/compose/install/)
 
 ---
 
@@ -47,10 +49,10 @@ There are multiple cloud providers you can turn to for docker setups
 ---
 
 ## Docker: The basics
-Docker is a tool that lets developers & sysadmins easily deploy apps in containers that can run on the host operating system
+Docker is a tool that lets developers easily build, deploy and run apps in containers that run using the host OS and its resources
 
 **Benefits:**
-- Allows users to package an app with all its dependencies into a standardized unit for software development
+- Allows users to package an app with all its dependencies into a standardized unit of software
 - Containers are lightweight and can use the underlying system and its resources efficiently
 
 ----
@@ -138,7 +140,7 @@ The words `"Hello World!"` should appear
 ---
 
 ### Dockerfile
-This file containes a set of instructions that docker will use to build our image
+This file contains a set of instructions that docker will use to build our image
 
 In the same directory as our index.js (`tiny_app/`), create a new file named `Dockerfile`
 ```bash
@@ -514,11 +516,10 @@ You can add -d at the end of the command to run in detached mode
 ### POST
 Add entry to our database
 ```bash
-$ curl -X POST \
+curl -X POST \
   http://localhost:8080/api/keyboards \
-  -H 'Cache-Control: no-cache' \
-  -H 'Content-Type: application/x-www-form-urlencoded' \
-  -d 'name=Planck&style=ortholinear&switch=Zealio%2065g'
+  -H 'Content-Type: application/json' \
+  -d '{ "name": "Planck", "style": "ortholinear", "switch": "Zealio 65g"}'
 ```
 
 ----
@@ -526,7 +527,7 @@ $ curl -X POST \
 ### GET
 Retrieve our new record
 ```bash
-$ curl -X GET \
+curl -X GET \
   http://localhost:8080/api/keyboards/
 ```
 

@@ -12,10 +12,13 @@ const apiRoutes = require("./routes/api-routes")
 
 
 // Configure bodyparser to handle post requests
-app.use(bodyParser.urlencoded({
-  extended: true
-}));
 app.use(bodyParser.json());
+
+// Use if you are using urlencoded data for your post
+// app.use(bodyParser.urlencoded({
+//   extended: true
+// }));
+
 
 // Connect to Mongoose and set connection variable
 mongoose.connect('mongodb://mongo:27017/expressmongo', { useNewUrlParser: true, useUnifiedTopology: true });
