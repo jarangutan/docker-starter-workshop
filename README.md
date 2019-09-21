@@ -17,4 +17,4 @@ This tutorial covers the use of `docker` with `docker_compose` to create a REST 
 
 ## Running the presentation
 - Install reveal-md `npm install -g reveal-md`
-- Run `reveal-md presentation.md
+- Run `reveal-md presentation.md`
