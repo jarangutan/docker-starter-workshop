@@ -537,6 +537,8 @@ We should see
 {"status":"success","message":"Sweet keyboards successfully retrieved!","data":[{"_id":"5c8413f28eb193001ed66783","create_date":"2019-03-09T19:28:50.537Z","name":"Planck","style":"ortholinear","switch":"Zealio 65g","__v":0}]}
 ```
 
+---
+
 ## Congratulations!
 You delved into what makes docker fun!
 
