@@ -1,0 +1,18 @@
+{
+  "name": "resthub",
+  "version": "1.0.0",
+  "description": "An app demonstrating simple Restful API implementation",
+  "author": "Jose Aranguren",
+  "license": "ISC",
+  "homepage": "https://github.com/jarangutan/docker-starter-workshop#readme",
+  "main": "index.js",
+  "scripts": {
+    "start": "nodemon ./src/index.js"
+  },
+  "dependencies": {
+    "body-parser": "^1.19.0",
+    "express": "^4.17.1",
+    "mongoose": "^5.7.1",
+    "nodemon": "^1.19.2"
+  }
+}
